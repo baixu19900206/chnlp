@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#-*-coding=utf-8-*-
+# -*-coding=utf-8-*-
 
 import warnings
 import sys
@@ -14,19 +14,17 @@ class Vertex(object):
     """
 
     def __init__(self, vertex_id):
-        self.id =  vertex_id
-        self.connections=  {}
+        self.id = vertex_id
+        self.connections = {}
         self.distance = sys.maxsize
         self.pre = None
         self.visited = False
 
     def __str__(self):
-        return 'vertex_'+str(self.id)
-
+        return 'vertex_' + str(self.id)
 
     def get_weight(self, vertex):
         return self.connections.get(vertex, sys.maxsize)
-
 
     def add_connection(self, to_vertex, distance):
         self.connections[to_vertex] = distance
@@ -35,35 +33,29 @@ class Vertex(object):
         return self.distance
 
     def __lt__(self, other):
-        return self.distance<other.distance
-
+        return self.distance < other.distance
 
     def __hash__(self):
         return self.id
 
 
-
 class Graph(object):
-
     def __init__(self):
         self.vertexs = []
         self.edges = []
 
-
     def add_vertex(self, vertex):
         if vertex in self.vertexs:
-            warnings.warn('%s is in graph'%(vertex))
+            warnings.warn('%s is in graph' % (vertex))
             return
         self.vertexs.append(vertex)
-
 
     def get_vertex(self, vertex):
         if vertex in self.vertexs:
             return vertex
         return None
 
-
-    def add_edge(self,from_vertex, to_vertex, distance ):
+    def add_edge(self, from_vertex, to_vertex, distance):
 
         if from_vertex not in self.vertexs:
             self.add_vertex(from_vertex)
