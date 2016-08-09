@@ -5,9 +5,8 @@ __author__ = "wu.zheng"
 
 
 class Vertex(object):
-    def __init__(self, word, id):
+    def __init__(self, id):
 
-        self.word = word
         self.id = id
         self.pre_nodes = []
         self.current_index = 0
@@ -22,23 +21,23 @@ class Vertex(object):
         return self.id
 
     def __str__(self):
-        return self.word
+        return str(self.id)
 
-    def add_pre(self, from_node):
-        self.pre_nodes.append(from_node)
+    def add_pre(self, from_pre):
+        self.pre_nodes.append(from_pre)
         self.pre_nodes = sorted(self.pre_nodes)
 
-    def is_last(self):
-        if not self.pre_nodes:
-            return True
-        else:
-            return self.current_index == len(self.pre_nodes) - 1
+    def get_current_node(self):
+        return self.pre_nodes[self.current_index]
 
     def pop_pre(self):
-        if not self.is_last():
+        if self.current_index>= len(self.pre_nodes)-1:
+            return
+        else :
             self.current_index+=1
             return self.pre_nodes[self.current_index]
-        return None
 
-    def get_current_pre(self):
-        return self.pre_nodes[self.current_index]
+    def has_pre(self):
+        if self.current_index >= len(self.pre_nodes)-1:
+            return False
+        return True

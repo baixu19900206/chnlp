@@ -7,54 +7,73 @@ from common.wordnet import WordNet
 import copy
 
 
+
 class NShotPath(object):
 
     def __init__(self):
         pass
 
-    def seg(self, sentence):
+    def seg(self, sentence, n):
+
+        if not sentence:
+            return sentence
+
         stack = []
         path = []
         word_net = WordNet(sentence)
-        if not word_net.size:
-            return path
 
-        last_vertex = word_net.get_last_vertex()
-        stack.append(last_vertex.id)
+        last_node = word_net.get_last()
+        stack.append(last_node)
+        current_node = last_node
 
-        if word_net.isfinish():
-            path.append(copy.deepcopy(stack))
-            return path
+        while stack:
+            while current_node!=0:
+                first_node = word_net.get_vertex(current_node).get_current_node()
 
-        current_vertex = last_vertex
+                stack.append(first_node)
+                current_node = first_node
 
-        while not word_net.isfinish():
-            # todo push
-            # step 3
-            while current_vertex.id > 0:
-                first_vertex = current_vertex.get_current_pre()
-                stack.append(first_vertex.id)
-                current_vertex = first_vertex
             path.append(copy.deepcopy(stack))
 
-            if not stack:
-                return path
+            # path[0] = sorted(path[0])
+            # for index in range(len(path[0])-1):
+            #     print sentence[path[0][index]:path[0][index+1]]
+            # print path
 
-            while stack:
-                current_vertex= word_net.get_vertex(stack.pop())
-                if current_vertex.is_last():
+            current_node = stack.pop()
+
+            while True:
+                print stack
+                current_vertex = word_net.get_vertex(current_node)
+
+                if not stack:
+                    break
+
+                if not current_vertex.has_pre() and stack:
+                    current_node = stack.pop()
                     continue
                 else:
+                    stack.append(current_node)
+                    current_node = current_vertex.pop_pre()
+                    stack.append(current_node)
                     break
-                print 'stack'
+
+
 
         return path
 
 
 if __name__ == '__main__':
     # sentence = u'今天，刘志军案的关键人物,山西女商人丁书苗在市二中院出庭受审'
+    sentence = u'商品和服务'
+    sentence =u'安徽省合肥市长江路'
     sentence = u'他说的确实在理'
     segment = NShotPath()
-    path = segment.seg(sentence)
+    path = segment.seg(sentence, 3)
     for p in path :
+        p = sorted(p)
         print p
+        print "#"*10
+        print len(p)
+        for index in range(len(p)-1):
+            print sentence[p[index]:p[index+1]]
