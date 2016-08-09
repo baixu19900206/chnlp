@@ -26,6 +26,7 @@ class Vertex(object):
 
     def add_pre(self, from_node):
         self.pre_nodes.append(from_node)
+        self.pre_nodes = sorted(self.pre_nodes)
 
     def is_last(self):
         if not self.pre_nodes:
@@ -38,3 +39,6 @@ class Vertex(object):
             self.current_index+=1
             return self.pre_nodes[self.current_index]
         return None
+
+    def get_current_pre(self):
+        return self.pre_nodes[self.current_index]
